@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derest — Leadership Communication Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;0,900;1,300;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:       #0f0f0f;
+    --black-mid:   #1a1a1a;
+    --black-soft:  #222222;
+    --black-card:  #191919;
+    --orange:      #f97316;
+    --orange-dark: #ea6c0a;
+    --white:       #ffffff;
+    --text-muted:  rgba(255,255,255,0.5);
+    --text-dim:    rgba(255,255,255,0.3);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'DM Sans',sans-serif; background:var(--black); color:var(--white); overflow-x:hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1.25rem 4rem;
+    background:rgba(15,15,15,0.93);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  .nav-logo { font-family:'Fraunces',serif; font-size:1.4rem; font-weight:700; color:var(--white); letter-spacing:-0.02em; }
+  .nav-logo span { color:var(--orange); }
+  .nav-cta {
+    background:var(--orange); color:var(--black);
+    font-size:0.85rem; font-weight:600; padding:0.6rem 1.4rem;
+    border-radius:4px; text-decoration:none; transition:background .2s;
+  }
+  .nav-cta:hover { background:var(--orange-dark); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height:100vh; background:var(--black);
+    position:relative; display:flex; align-items:center;
+    padding:8rem 4rem 5rem; overflow:hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse at 72% 50%, rgba(249,115,22,0.09) 0%, transparent 62%);
+  }
+  .hero-photo-area {
+    position:absolute; right:0; top:0; bottom:0; width:50%;
+    background:linear-gradient(to right,var(--black),transparent 40%),
+               linear-gradient(to top,var(--black),transparent 30%);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .hero-photo-placeholder {
+    width:100%; height:100%;
+    background:linear-gradient(160deg,rgba(249,115,22,0.04) 0%,rgba(249,115,22,0.09) 100%);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .photo-hint { font-size:.8rem; color:rgba(255,255,255,.13); text-align:center; line-height:1.7; }
+
+  .hero-content { position:relative; z-index:2; max-width:620px; }
+  .hero-eyebrow {
+    display:inline-block; font-size:.74rem; font-weight:500; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--orange); margin-bottom:1.5rem;
+    border:1px solid rgba(249,115,22,.28); padding:.35rem .9rem; border-radius:2px;
+  }
+  .hero h1 {
+    font-family:'Fraunces',serif; font-size:clamp(3rem,5.5vw,5rem);
+    font-weight:900; line-height:1.0; color:var(--white);
+    margin-bottom:.15em; letter-spacing:-.03em;
+  }
+  .hero h1 .accent { color:var(--orange); font-style:italic; }
+  .hero-body { margin:2rem 0 2.5rem; display:flex; flex-direction:column; gap:.65rem; }
+  .hero-body p { font-size:1.12rem; color:var(--white); line-height:1.65; }
+  .hero-body p.dim { color:var(--text-muted); }
+  .hero-body p.hl { color:var(--orange); font-weight:500; }
+  .hero-proof { font-size:.85rem; color:var(--text-muted); margin-top:1rem; }
+  .hero-proof strong { color:var(--white); }
+  .hero-buttons { display:flex; gap:1rem; flex-wrap:wrap; }
+  .btn-primary {
+    background:var(--orange); color:var(--black); font-size:.95rem; font-weight:600;
+    padding:.85rem 2rem; border-radius:4px; text-decoration:none; display:inline-block; transition:all .2s;
+  }
+  .btn-primary:hover { background:var(--orange-dark); transform:translateY(-1px); }
+  .btn-outline {
+    border:1px solid rgba(255,255,255,.25); color:var(--white); font-size:.9rem;
+    padding:.85rem 1.75rem; border-radius:4px; text-decoration:none; display:inline-block; transition:all .2s;
+  }
+  .btn-outline:hover { border-color:rgba(255,255,255,.6); }
+
+  /* ── MARQUEE ── */
+  .logo-strip {
+    background:var(--black-mid);
+    padding:1.6rem 0;
+    border-top:1px solid rgba(255,255,255,.05);
+    border-bottom:1px solid rgba(255,255,255,.05);
+    overflow:hidden;
+  }
+  .logo-strip-label {
+    text-align:center; font-size:.7rem; font-weight:500; letter-spacing:.13em;
+    text-transform:uppercase; color:rgba(255,255,255,.28); margin-bottom:1.1rem;
+  }
+  .marquee-wrap { overflow:hidden; }
+  .marquee-track {
+    display:flex; width:max-content;
+    animation:marquee 32s linear infinite;
+  }
+  .marquee-track:hover { animation-play-state:paused; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .marquee-item {
+    display:flex; align-items:center; padding:0 2.75rem;
+    font-family:'Fraunces',serif; font-size:.92rem; font-weight:700;
+    color:rgba(255,255,255,.2); white-space:nowrap;
+    border-right:1px solid rgba(255,255,255,.06);
+    transition:color .2s; cursor:default;
+  }
+  .marquee-item:hover { color:rgba(249,115,22,.65); }
+
+  /* ── SECTION SHELL ── */
+  section { padding:6rem 4rem; }
+  .section-eyebrow {
+    font-size:.71rem; font-weight:600; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--orange); margin-bottom:.75rem;
+  }
+  .section-title {
+    font-family:'Fraunces',serif; font-size:clamp(1.9rem,3.2vw,2.9rem);
+    font-weight:700; line-height:1.15; letter-spacing:-.025em; margin-bottom:1rem;
+  }
+  .section-title .accent { color:var(--orange); font-style:italic; }
+  .section-subtitle { font-size:1rem; line-height:1.75; max-width:560px; }
+  .section-header { margin-bottom:3.5rem; }
+
+  /* light-section text overrides */
+  .on-light .section-title  { color:var(--black); }
+  .on-light .section-subtitle { color:#555; }
+  .on-light .section-eyebrow { color:var(--orange); }
+
+  /* ── INCLUDED — 4-col, dark card on off-black bg ── */
+  .included { background:#141414; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:1.15rem; }
+  .inc-card {
+    background:var(--black-card); border:1px solid rgba(249,115,22,.1);
+    border-radius:8px; padding:1.4rem; transition:border-color .2s,transform .2s;
+  }
+  .inc-card:hover { border-color:var(--orange); transform:translateY(-2px); }
+  .inc-icon {
+    width:38px; height:38px; border-radius:7px; margin-bottom:.9rem;
+    background:linear-gradient(135deg,#2a2a2a,var(--orange));
+    display:flex; align-items:center; justify-content:center; font-size:1rem;
+  }
+  .inc-card h3 { font-size:.92rem; font-weight:600; color:var(--white); margin-bottom:.35rem; }
+  .inc-card p  { font-size:.84rem; color:rgba(255,255,255,.5); line-height:1.6; }
+
+  /* ── CASE STUDIES ── */
+  .cases { background:var(--black-mid); }
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:1.4rem; }
+  .case-card {
+    background:var(--black-soft); border:1px solid rgba(255,255,255,.07);
+    border-radius:8px; padding:2rem; transition:border-color .2s;
+  }
+  .case-card:hover { border-color:rgba(249,115,22,.35); }
+  .case-result { font-family:'Fraunces',serif; font-size:2.2rem; font-weight:700; color:var(--orange); margin-bottom:.5rem; }
+  .case-card h3 { font-size:1rem; font-weight:500; color:var(--white); line-height:1.55; margin-bottom:.9rem; }
+  .case-body { font-size:.87rem; color:rgba(255,255,255,.42); line-height:1.65; margin-bottom:1rem; }
+  .tags { display:flex; gap:.5rem; flex-wrap:wrap; }
+  .tag {
+    font-size:.7rem; font-weight:500; padding:.22rem .65rem; border-radius:2px;
+    background:rgba(249,115,22,.1); color:rgba(249,115,22,.75); border:1px solid rgba(249,115,22,.2);
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how { background:#141414; }
+  .steps { display:grid; grid-template-columns:repeat(3,1fr); }
+  .step {
+    padding:2.25rem 2.5rem; position:relative;
+    border-right:1px solid rgba(255,255,255,.06);
+  }
+  .step:last-child { border-right:none; }
+  .step-num {
+    font-family:'Fraunces',serif; font-size:3.5rem; font-weight:900;
+    color:rgba(249,115,22,.1); line-height:1; margin-bottom:.75rem;
+  }
+  .step h3 { font-size:1rem; font-weight:600; color:var(--white); margin-bottom:.45rem; }
+  .step p  { font-size:.88rem; color:var(--text-muted); line-height:1.65; }
+
+  /* ── VALUE PILLARS — 4-col ── */
+  .pillars { background:var(--black-mid); }
+  .pillars-header { text-align:center; margin-bottom:3.5rem; }
+  .pillars-header .section-subtitle { margin:0 auto; }
+  .grid-4p { display:grid; grid-template-columns:repeat(4,1fr); gap:2rem 2.25rem; }
+  .pillar { display:flex; gap:.9rem; align-items:flex-start; }
+  .pill-dot { width:7px; height:7px; border-radius:50%; background:var(--orange); flex-shrink:0; margin-top:.45rem; }
+  .pillar h3 { font-size:.92rem; font-weight:600; color:var(--white); margin-bottom:.3rem; }
+  .pillar p  { font-size:.85rem; color:var(--text-muted); line-height:1.65; }
+
+  /* ── TESTIMONIALS — 4-col ── */
+  .testimonials { background:#141414; }
+  .grid-4t { display:grid; grid-template-columns:repeat(4,1fr); gap:1.15rem; }
+  .testi-card {
+    background:var(--black-card); border:1px solid rgba(255,255,255,.07);
+    border-radius:8px; padding:1.5rem;
+  }
+  .stars { color:var(--orange); font-size:.82rem; margin-bottom:.7rem; }
+  .testi-card blockquote { font-size:.87rem; color:rgba(255,255,255,.78); line-height:1.72; font-style:italic; margin-bottom:.9rem; }
+  .testi-role { font-size:.73rem; color:rgba(255,255,255,.32); font-weight:500; letter-spacing:.04em; }
+
+  /* ── 8-WEEK PLAN — 4-col ── */
+  .plan { background:var(--black-mid); }
+  .weeks { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+  .week {
+    background:var(--black-soft); border:1px solid rgba(249,115,22,.1);
+    border-radius:8px; overflow:hidden;
+  }
+  .week-header {
+    padding:1rem 1.2rem; border-bottom:1px solid rgba(249,115,22,.08);
+    display:flex; flex-direction:column; gap:.35rem;
+  }
+  .week-badge {
+    display:inline-block; font-family:'Fraunces',serif; font-size:.68rem; font-weight:700;
+    color:var(--orange); background:rgba(249,115,22,.1); padding:.22rem .6rem; border-radius:2px; width:fit-content;
+  }
+  .week-title { font-size:.88rem; font-weight:600; color:var(--white); }
+  .week-items { padding:.9rem 1.2rem; display:flex; flex-direction:column; gap:.55rem; }
+  .week-item { display:flex; align-items:flex-start; gap:.55rem; font-size:.81rem; color:rgba(255,255,255,.5); line-height:1.5; }
+  .week-item::before { content:'◆'; font-size:.38rem; color:var(--orange); flex-shrink:0; margin-top:.45rem; }
+
+  /* ── FEATURE QUOTE ── */
+  .fquote { background:var(--black); padding:5rem 4rem; text-align:center; }
+  .fquote-inner { max-width:680px; margin:0 auto; }
+  .fquote-inner blockquote {
+    font-family:'Fraunces',serif; font-size:clamp(1.35rem,2.4vw,1.95rem);
+    font-weight:300; font-style:italic; color:var(--white); line-height:1.55; margin-bottom:1.4rem;
+  }
+  .fquote-inner cite { font-size:.85rem; color:var(--orange); font-style:normal; font-weight:500; }
+
+  /* ── PRICING — 2-col on dark ── */
+  .pricing { background:#141414; }
+  .pricing .section-header { text-align:center; }
+  .pricing .section-subtitle { margin:0 auto; }
+  .pricing-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; max-width:820px; margin:0 auto; }
+  .p-card {
+    background:var(--black-card); border:1px solid rgba(249,115,22,.15);
+    border-radius:12px; padding:2.5rem; position:relative;
+  }
+  .p-card.featured { border:2px solid var(--orange); }
+  .pop-badge {
+    position:absolute; top:-13px; left:50%; transform:translateX(-50%);
+    background:var(--orange); color:var(--black);
+    font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    padding:.28rem 1rem; border-radius:2px; white-space:nowrap;
+  }
+  .p-card .plan-name { font-family:'Fraunces',serif; font-size:1.5rem; font-weight:700; color:var(--white); margin-bottom:.3rem; }
+  .p-card .plan-sub  { font-size:.85rem; color:var(--text-muted); margin-bottom:.7rem; }
+  .plan-for {
+    font-size:.76rem; font-weight:500; color:var(--orange); background:rgba(249,115,22,.08);
+    padding:.28rem .72rem; border-radius:2px; display:inline-block; margin-bottom:1.4rem;
+  }
+  .p-divider { border:none; border-top:1px solid rgba(255,255,255,.07); margin:1.1rem 0; }
+  .p-features { list-style:none; display:flex; flex-direction:column; gap:.6rem; margin-bottom:2rem; }
+  .p-features li { display:flex; align-items:flex-start; gap:.65rem; font-size:.88rem; color:rgba(255,255,255,.75); line-height:1.5; }
+  .p-features li::before { content:'✓'; color:var(--orange); font-weight:700; flex-shrink:0; }
+  .btn-p { display:block; text-align:center; padding:.88rem; border-radius:4px; font-weight:600; font-size:.93rem; text-decoration:none; transition:all .2s; }
+  .btn-p-solid { background:var(--orange); color:var(--black); }
+  .btn-p-solid:hover { background:var(--orange-dark); }
+  .btn-p-outline { border:1.5px solid rgba(249,115,22,.4); color:var(--orange); }
+  .btn-p-outline:hover { border-color:var(--orange); background:rgba(249,115,22,.05); }
+
+  /* ── FINAL CTA ── */
+  .final-cta { background:var(--black-mid); padding:7rem 4rem; text-align:center; position:relative; overflow:hidden; }
+  .final-cta::before {
+    content:''; position:absolute; top:-40%; left:50%; transform:translateX(-50%);
+    width:700px; height:700px; border-radius:50%;
+    background:radial-gradient(circle,rgba(249,115,22,.07) 0%,transparent 70%);
+  }
+  .final-cta-inner { position:relative; z-index:2; max-width:580px; margin:0 auto; }
+  .final-cta h2 {
+    font-family:'Fraunces',serif; font-size:clamp(2.2rem,4vw,3.5rem);
+    font-weight:700; color:var(--white); line-height:1.15; letter-spacing:-.025em; margin-bottom:1rem;
+  }
+  .final-cta h2 em { color:var(--orange); font-style:italic; }
+  .final-cta p  { font-size:1rem; color:var(--text-muted); margin-bottom:2.5rem; line-height:1.7; }
+  .avail { font-size:.75rem; color:var(--text-dim); margin-top:1.2rem; letter-spacing:.06em; }
+
+  /* ── FOOTER ── */
+  footer {
+    background:var(--black); border-top:1px solid rgba(255,255,255,.05);
+    padding:1.75rem 4rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;
+  }
+  .footer-logo { font-family:'Fraunces',serif; font-size:1.2rem; font-weight:700; color:var(--white); }
+  .footer-logo span { color:var(--orange); }
+  footer p { font-size:.76rem; color:var(--text-dim); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+  .hero-content>* { animation:fadeUp .7s ease both; }
+  .hero-eyebrow  { animation-delay:.1s; }
+  .hero h1       { animation-delay:.2s; }
+  .hero-body     { animation-delay:.33s; }
+  .hero-buttons  { animation-delay:.48s; }
+  .hero-proof    { animation-delay:.58s; }
+
+  .cursor {
+    display:inline-block; width:3px; height:.85em;
+    background:var(--orange); margin-left:2px; vertical-align:middle;
+    animation:blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:1100px) {
+    .grid-4,.grid-4p,.grid-4t,.weeks { grid-template-columns:repeat(2,1fr); }
+  }
+  @media(max-width:768px) {
+    nav { padding:1rem 1.5rem; }
+    section { padding:4rem 1.5rem; }
+    .hero { padding:6.5rem 1.5rem 4rem; }
+    .hero-photo-area { display:none; }
+    .hero h1 { font-size:2.75rem; }
+    .grid-4,.grid-4p,.grid-4t,.weeks,.grid-2,.steps,.pricing-grid { grid-template-columns:1fr; }
+    .step { border-right:none; border-bottom:1px solid rgba(255,255,255,.06); }
+    .step:last-child { border-bottom:none; }
+    .fquote,.final-cta { padding:4rem 1.5rem; }
+    footer { padding:1.5rem; flex-direction:column; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">De<span>rest</span></div>
+  <a href="#book" class="nav-cta">Book a free call</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-photo-area">
+    <div class="hero-photo-placeholder">
+      <p class="photo-hint">[ Your photo here ]<br>Shoulder-up · dark background<br>confident pose</p>
+    </div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Leadership Communication Coaching</div>
+    <h1>Lead the Room.<br>Own the <span class="accent" id="typed-word">Narrative<span class="cursor"></span></span></h1>
+    <div class="hero-body">
+      <p>You have the <strong>expertise.</strong></p>
+      <p class="dim">But when you speak, does the room feel it?</p>
+      <p class="hl">I can change that.</p>
+      <p class="dim">I've helped <strong style="color:var(--white)">100+ executives, founders, and VCs</strong> structure their thinking and make every word land — in boardrooms, on stages, in pitches.</p>
+    </div>
+    <div class="hero-buttons">
+      <a href="#book" class="btn-primary">Book your free call</a>
+      <a href="#plan" class="btn-outline">See the 8-week program</a>
+    </div>
+    <p class="hero-proof">Trusted by leaders from <strong>20+ countries</strong> &nbsp;·&nbsp; No scripts &nbsp;·&nbsp; No performance</p>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="logo-strip">
+  <p class="logo-strip-label">Companies I've worked with</p>
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">McKinsey &amp; Company</span>
+      <span class="marquee-item">Bain &amp; Company</span>
+      <span class="marquee-item">BCG</span>
+      <span class="marquee-item">KPMG</span>
+      <span class="marquee-item">Google</span>
+      <span class="marquee-item">Amazon</span>
+      <span class="marquee-item">Meta</span>
+      <span class="marquee-item">US Government (Diplomat)</span>
+      <span class="marquee-item">Al Jazeera</span>
+      <span class="marquee-item">Schneider Electric</span>
+      <span class="marquee-item">Al Shaya Group</span>
+      <span class="marquee-item">Root Labs</span>
+      <span class="marquee-item">Groww</span>
+      <!-- duplicate for seamless loop -->
+      <span class="marquee-item">McKinsey &amp; Company</span>
+      <span class="marquee-item">Bain &amp; Company</span>
+      <span class="marquee-item">BCG</span>
+      <span class="marquee-item">KPMG</span>
+      <span class="marquee-item">Google</span>
+      <span class="marquee-item">Amazon</span>
+      <span class="marquee-item">Meta</span>
+      <span class="marquee-item">US Government (Diplomat)</span>
+      <span class="marquee-item">Al Jazeera</span>
+      <span class="marquee-item">Schneider Electric</span>
+      <span class="marquee-item">Al Shaya Group</span>
+      <span class="marquee-item">Root Labs</span>
+      <span class="marquee-item">Groww</span>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT'S INCLUDED -->
+<section class="included">
+  <div class="section-header">
+    <p class="section-eyebrow">What you get</p>
+    <h2 class="section-title">Your communication presence —<br><span class="accent">built in 8 weeks</span></h2>
+    <p class="section-subtitle" style="color:var(--text-muted)">Every deliverable is designed for leaders who think fast, speak often, and need their words to move people.</p>
+  </div>
+  <div class="grid-4">
+    <div class="inc-card">
+      <div class="inc-icon">🔍</div>
+      <h3>Communication Style Audit</h3>
+      <p>We diagnose how you think, structure, and speak — and pinpoint exactly where you lose the room.</p>
+    </div>
+    <div class="inc-card">
+      <div class="inc-icon">🧠</div>
+      <h3>Thought Structure Framework</h3>
+      <p>A personal framework for organising ideas before you open your mouth — built around how your brain works.</p>
+    </div>
+    <div class="inc-card">
+      <div class="inc-icon">📖</div>
+      <h3>Storytelling Toolkit</h3>
+      <p>The exact narrative structures that make complex ideas feel simple, urgent, and impossible to forget.</p>
+    </div>
+    <div class="inc-card">
+      <div class="inc-icon">⚡</div>
+      <h3>High-Stakes Moment Playbook</h3>
+      <p>Custom prep for your actual calendar — board meetings, investor pitches, keynotes, team all-hands.</p>
+    </div>
+    <div class="inc-card">
+      <div class="inc-icon">🎯</div>
+      <h3>Weekly 1-on-1 Coaching</h3>
+      <p>Live online sessions with recorded feedback so you can track exactly how far you've come each week.</p>
+    </div>
+    <div class="inc-card">
+      <div class="inc-icon">🎤</div>
+      <h3>Delivery &amp; Presence Training</h3>
+      <p>Pace, pauses, eye contact, body language — the physical layer that makes your words land harder.</p>
+    </div>
+    <div class="inc-card">
+      <div class="inc-icon">📊</div>
+      <h3>Progress Tracking &amp; Review</h3>
+      <p>Bi-weekly benchmarks so progress is visible and measurable, not just felt.</p>
+    </div>
+    <div class="inc-card">
+      <div class="inc-icon">📁</div>
+      <h3>Personal Communication Playbook</h3>
+      <p>Your own library of frameworks, phrases, and structures — yours to keep and use forever.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section class="cases">
+  <div class="section-header">
+    <p class="section-eyebrow">Results</p>
+    <h2 class="section-title">Our work in action</h2>
+    <p class="section-subtitle" style="color:var(--text-muted)">Real leaders. Real transformations. Real outcomes.</p>
+  </div>
+  <div class="grid-2">
+    <div class="case-card">
+      <div class="case-result">$2M</div>
+      <h3>From rambling in boardrooms to closing a $2M round — in 8 weeks</h3>
+      <p class="case-body">A Series A founder who knew his product cold but kept losing investors in the room. We rebuilt his pitch structure and found the story inside the data.</p>
+      <div class="tags">
+        <span class="tag">Investor Storytelling</span>
+        <span class="tag">Thought Structure</span>
+        <span class="tag">Executive Presence</span>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-result">0 → Keynote</div>
+      <h3>From the VP everyone avoided presenting with — to a sought-after keynote speaker</h3>
+      <p class="case-body">A technical leader who had the ideas but buried them in caveats. 8 weeks later, she was opening the company's flagship event to a standing ovation.</p>
+      <div class="tags">
+        <span class="tag">Storytelling</span>
+        <span class="tag">Stage Confidence</span>
+        <span class="tag">Delivery Coaching</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="section-header">
+    <p class="section-eyebrow">The process</p>
+    <h2 class="section-title">Simple process.<br><span class="accent">Serious results.</span></h2>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Choose your plan</h3>
+      <p>One-time 8-week intensive or an ongoing retainer for lasting transformation. You decide the level of commitment.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Diagnose &amp; design</h3>
+      <p>We audit how you think, speak, and structure — then build your personal communication blueprint entirely in your voice.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Practice &amp; perform</h3>
+      <p>You rehearse in real scenarios with real feedback. We refine until your voice becomes your biggest competitive advantage.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE PILLARS -->
+<section class="pillars">
+  <div class="pillars-header section-header">
+    <p class="section-eyebrow">Why Derest</p>
+    <h2 class="section-title">Thought leadership<br><span class="accent">doesn't happen by accident</span></h2>
+    <p class="section-subtitle" style="color:var(--text-muted);margin:0 auto;">Eight reasons leaders trust us with the thing they can't afford to get wrong.</p>
+  </div>
+  <div class="grid-4p">
+    <div class="pillar"><div class="pill-dot"></div><div>
+      <h3>Your words, sharpened</h3>
+      <p>We don't put words in your mouth. We help you find the clearest, most powerful version of what you already mean.</p>
+    </div></div>
+    <div class="pillar"><div class="pill-dot"></div><div>
+      <h3>No contracts, just results</h3>
+      <p>One-time program or ongoing growth — you decide the commitment. No lock-ins, no pressure.</p>
+    </div></div>
+    <div class="pillar"><div class="pill-dot"></div><div>
+      <h3>Real-world scenario prep</h3>
+      <p>Boardrooms, keynotes, pitches, all-hands — we prepare you for what's actually on your calendar.</p>
+    </div></div>
+    <div class="pillar"><div class="pill-dot"></div><div>
+      <h3>Clear pricing, no surprises</h3>
+      <p>Predictable investment. Measurable shifts. No hidden fees, no wasted sessions.</p>
+    </div></div>
+    <div class="pillar"><div class="pill-dot"></div><div>
+      <h3>Full confidentiality</h3>
+      <p>Every client gets an NDA. What you share in sessions stays in sessions. Always.</p>
+    </div></div>
+    <div class="pillar"><div class="pill-dot"></div><div>
+      <h3>Done with you, not for you</h3>
+      <p>This is coaching, not ghostwriting. You build the skill. We make sure it sticks — and compounds.</p>
+    </div></div>
+    <div class="pillar"><div class="pill-dot"></div><div>
+      <h3>Measurable progress</h3>
+      <p>Bi-weekly benchmarks with clear data. You always know exactly how far you've come.</p>
+    </div></div>
+    <div class="pillar"><div class="pill-dot"></div><div>
+      <h3>Global perspective</h3>
+      <p>Coached leaders across 20+ countries. We understand how communication shifts across cultures and rooms.</p>
+    </div></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header">
+    <p class="section-eyebrow">Client stories</p>
+    <h2 class="section-title">What our clients say</h2>
+  </div>
+  <div class="grid-4t">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"I used to over-explain everything. Now I say half as much and people lean in twice as hard. It changed how I lead."</blockquote>
+      <p class="testi-role">COO, Series B Startup</p>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"I had a keynote in three weeks and was terrified. After two sessions I had a structure that felt completely natural. The audience came up to me after."</blockquote>
+      <p class="testi-role">Founder, SaaS Company</p>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"My board used to tune out halfway through my updates. The storytelling framework we built completely changed the dynamic in the room."</blockquote>
+      <p class="testi-role">CEO, Growth-Stage Company</p>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"This isn't presentation training. It's thinking training. I'm clearer in Slack, in 1-on-1s, in everything."</blockquote>
+      <p class="testi-role">Director of Engineering</p>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"I finally stopped rambling in interviews. Got two offers the month after we worked together. Coincidence? I don't think so."</blockquote>
+      <p class="testi-role">VP of Product</p>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"Subtle but powerful. I didn't feel like I was performing — I felt like the best version of myself finally had a microphone."</blockquote>
+      <p class="testi-role">Angel Investor</p>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"The frameworks stuck instantly. I used them in a pitch three days after our first session. We got the term sheet."</blockquote>
+      <p class="testi-role">Founder, Fintech Startup</p>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"I've worked with coaches before. This is the first time I actually sound like myself — just sharper, clearer, more confident."</blockquote>
+      <p class="testi-role">Managing Director, Consulting</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8-WEEK PLAN -->
+<section class="plan" id="plan">
+  <div class="section-header">
+    <p class="section-eyebrow">The roadmap</p>
+    <h2 class="section-title">The Derest<br><span class="accent">8-Week Blueprint</span></h2>
+    <p class="section-subtitle" style="color:var(--text-muted)">Your path from scattered thinker to a leader whose words move rooms — in 8 focused weeks.</p>
+  </div>
+  <div class="weeks">
+    <div class="week">
+      <div class="week-header">
+        <span class="week-badge">Week 1</span>
+        <span class="week-title">Diagnosis &amp; Foundations</span>
+      </div>
+      <div class="week-items">
+        <div class="week-item">Deep-dive communication audit</div>
+        <div class="week-item">Identify where you lose the room</div>
+        <div class="week-item">Define goals &amp; high-stakes moments</div>
+        <div class="week-item">Build your messaging foundation</div>
+      </div>
+    </div>
+    <div class="week">
+      <div class="week-header">
+        <span class="week-badge">Week 2</span>
+        <span class="week-title">Structure &amp; Clarity</span>
+      </div>
+      <div class="week-items">
+        <div class="week-item">Pyramid Principle &amp; SCQA</div>
+        <div class="week-item">Lead with the point, not towards it</div>
+        <div class="week-item">Apply to real pitches &amp; meetings</div>
+        <div class="week-item">Cut filler and over-qualification</div>
+      </div>
+    </div>
+    <div class="week">
+      <div class="week-header">
+        <span class="week-badge">Week 3</span>
+        <span class="week-title">Storytelling Mechanics</span>
+      </div>
+      <div class="week-items">
+        <div class="week-item">Build your signature story style</div>
+        <div class="week-item">Tension, contrast, and specificity</div>
+        <div class="week-item">Make data feel human</div>
+        <div class="week-item">Story structures for different rooms</div>
+      </div>
+    </div>
+    <div class="week">
+      <div class="week-header">
+        <span class="week-badge">Week 4</span>
+        <span class="week-title">Presence &amp; Delivery</span>
+      </div>
+      <div class="week-items">
+        <div class="week-item">Voice, pace, and intentional pauses</div>
+        <div class="week-item">Eye contact &amp; physical presence</div>
+        <div class="week-item">Managing nerves under pressure</div>
+        <div class="week-item">First recorded run-throughs</div>
+      </div>
+    </div>
+    <div class="week">
+      <div class="week-header">
+        <span class="week-badge">Week 5</span>
+        <span class="week-title">High-Stakes Scenarios</span>
+      </div>
+      <div class="week-items">
+        <div class="week-item">Board meeting communication</div>
+        <div class="week-item">Investor pitch rehearsal</div>
+        <div class="week-item">Live feedback on real material</div>
+        <div class="week-item">Q&amp;A and difficult questions prep</div>
+      </div>
+    </div>
+    <div class="week">
+      <div class="week-header">
+        <span class="week-badge">Week 6</span>
+        <span class="week-title">Refinement &amp; Iteration</span>
+      </div>
+      <div class="week-items">
+        <div class="week-item">Review recordings from weeks 4–5</div>
+        <div class="week-item">Targeted drills on weak points</div>
+        <div class="week-item">Adapt style to different audiences</div>
+        <div class="week-item">Mid-program performance review</div>
+      </div>
+    </div>
+    <div class="week">
+      <div class="week-header">
+        <span class="week-badge">Week 7</span>
+        <span class="week-title">Full Dress Rehearsal</span>
+      </div>
+      <div class="week-items">
+        <div class="week-item">Full run of your upcoming talk</div>
+        <div class="week-item">Simulated pressure environment</div>
+        <div class="week-item">Final delivery refinements</div>
+        <div class="week-item">Confidence &amp; mindset anchoring</div>
+      </div>
+    </div>
+    <div class="week">
+      <div class="week-header">
+        <span class="week-badge">Week 8</span>
+        <span class="week-title">Performance &amp; Momentum</span>
+      </div>
+      <div class="week-items">
+        <div class="week-item">Final session &amp; program review</div>
+        <div class="week-item">Long-term independent practice plan</div>
+        <div class="week-item">Scaling visibility beyond one room</div>
+        <div class="week-item">Your personal playbook — to keep forever</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE QUOTE -->
+<div class="fquote">
+  <div class="fquote-inner">
+    <blockquote>"I never thought I'd say a coaching program changed how I think — not just how I speak. But Derest did exactly that. My team notices. My board notices. I notice."</blockquote>
+    <cite>— Founder, AI Infrastructure Company</cite>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-header">
+    <p class="section-eyebrow">Invest in your voice</p>
+    <h2 class="section-title">Choose your path</h2>
+    <p class="section-subtitle" style="color:var(--text-muted)">Both plans are delivered online, 1-on-1. No group sessions, no templates — just focused work on you.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="p-card">
+      <div class="plan-name">Intensive</div>
+      <p class="plan-sub">One-off 8-week program</p>
+      <span class="plan-for">Best for: one specific high-stakes moment</span>
+      <hr class="p-divider">
+      <ul class="p-features">
+        <li>Full communication &amp; delivery audit</li>
+        <li>Custom 8-week practice plan</li>
+        <li>Thought structure &amp; storytelling frameworks</li>
+        <li>8 × weekly 1-on-1 coaching sessions</li>
+        <li>Session recordings + written feedback</li>
+        <li>High-stakes moment playbook</li>
+        <li>WhatsApp async support throughout</li>
+        <li>NDA included</li>
+      </ul>
+      <a href="#book" class="btn-p btn-p-outline">Book a free call →</a>
+    </div>
+    <div class="p-card featured">
+      <div class="pop-badge">Most Popular</div>
+      <div class="plan-name">Transformation</div>
+      <p class="plan-sub">Ongoing retainer — month on month</p>
+      <span class="plan-for">Best for: leaders who want lasting change</span>
+      <hr class="p-divider">
+      <ul class="p-features">
+        <li>Everything in Intensive, ongoing</li>
+        <li>Weekly 1-on-1 coaching sessions</li>
+        <li>Real-time feedback on live material</li>
+        <li>Personalized storytelling development</li>
+        <li>Monthly performance review &amp; tracking</li>
+        <li>WhatsApp + Loom async support</li>
+        <li>Priority scheduling</li>
+        <li>No contracts — cancel any time</li>
+      </ul>
+      <a href="#book" class="btn-p btn-p-solid">Book a free call →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="book">
+  <div class="final-cta-inner">
+    <h2>Your next talk could be<br>the one they <em>remember.</em></h2>
+    <p>Book a free 15-minute call. No commitment — just a conversation about where you want your communication to take you.</p>
+    <a href="https://cal.com" class="btn-primary" style="font-size:1rem;padding:1rem 2.5rem;">Book your free call →</a>
+    <p class="avail">Limited spots available each month</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">De<span>rest</span></div>
+  <p>© Derest 2026. All rights reserved.</p>
+  <a href="https://linkedin.com" style="color:rgba(255,255,255,.28);font-size:.76rem;text-decoration:none;">LinkedIn</a>
+</footer>
+
+<script>
+  const words = ['Narrative.','Room.','Story.','Message.'];
+  let wi=0,ci=0,del=false;
+  const el=document.getElementById('typed-word');
+  el.innerHTML='<span></span><span class="cursor"></span>';
+  function type(){
+    const w=words[wi];
+    if(!del){ ci++; el.childNodes[0].textContent=w.slice(0,ci);
+      if(ci===w.length){del=true;setTimeout(type,1900);return;}
+    } else { ci--; el.childNodes[0].textContent=w.slice(0,ci);
+      if(ci===0){del=false;wi=(wi+1)%words.length;}
+    }
+    setTimeout(type,del?52:88);
+  }
+  setTimeout(type,900);
+</script>
+</body>
+</html>
